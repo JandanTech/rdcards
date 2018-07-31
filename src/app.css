@@ -8,7 +8,6 @@
 html,
 body {
   height: 100%;
-  width: 100%;
 }
 body {
   background-color: #45a173;
@@ -23,41 +22,6 @@ body {
   -ms-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
-
-.player {
-  width:100px;
-  height:100px;
-  border: 1px solid black;
-  position: absolute;
-}
-
-.player1, .player7, .player8 {
-  left:0px;
-}
-
-.player1, .player2, .player3 {
-  top:0px;
-}
-
-.player2, .player6 {
-  left:50%;
-  margin-left:-50px;
-
-}
-
-.player4, .player8 {
-  top:50%;
-  margin-top:50%;
-}
-
-.player3, .player4, .player5 {
-  right:0px;
-}
-
-.player5, .player6, .player7 {
-  bottom:0px;
-}
-
 #container {
   position: fixed;
   top: calc(50% + 1.5rem);
@@ -68,16 +32,47 @@ body {
   -ms-transform: translate3d(-50%, -50%, 0);
   transform: translate3d(-50%, -50%, 0);
 }
-.btn {
-  margin-top:120px;
+#topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #334d41;
+  padding: 0.25rem;
+  text-align: center;
+}
+#topbar button {
+  background: none;
+  border: 1px solid #fff;
+  outline: none;
+  margin: 0.1rem;
+  padding: 0.4rem;
+  font: inherit;
+  font-size: 0.75rem;
+  line-height: 1;
+  color: #fff;
+  cursor: pointer;
+}
+#topbar button:hover {
+  background-color: #fff;
+  color: #444;
+}
+.message {
+  position: fixed;
+  top: 2.5rem;
+  left: 0;
+  width: 100%;
+  padding: 1rem 0.5rem;
+  font-size: 0.5rem;
+  text-align: center;
 }
 .card {
   position: absolute;
   display: inline-block;
   left: -1.9375rem;
   top: -2.75rem;
-  width: 6.875rem;
-  height: 8.5rem;
+  width: 3.875rem;
+  height: 5.5rem;
   background-color: #fff;
   -webkit-border-radius: 4px;
   border-radius: 4px;

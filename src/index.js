@@ -1,47 +1,77 @@
-'use strict';
-import _ from 'lodash';
-import Deck from './models/deck';
-import Player from './models/player';
-import './app.css';
-import firebase from "firebase/app";
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyCt1iFZKaCCR5c_fDZGOf9P5XeXXF_bm_w",
-    authDomain: "rd-cards.firebaseapp.com",
-    databaseURL: "https://rd-cards.firebaseio.com",
-    projectId: "rd-cards",
-    storageBucket: "rd-cards.appspot.com",
-    messagingSenderId: "533006681334"
-  };
-  firebase.initializeApp(config); 
+ import _ from 'lodash';
+ import Deck from './deck';
+ import './app.css'
 
-var $container = document.createElement('div');
-$container.id="container";
 var deck = new Deck();
+console.log(deck);
 
-deck.cards.forEach(function (card, i) {
-  card.enableDragging();
-  card.enableFlipping();
-});
+for (let i = 0; i<deck.cards.length;i++) {
+	deck.cards[i].mount(document.getElementById("container"));
+} 
+
+document.getElementById("btnFan").addEventListener("click", function(event) {
+	for (let i = 0; i<deck.cards.length;i++) {
+		deck.cards[i].$el.setAttribute("style", `margin-left:${i}px` );
+	}
+})
+
+interact(".card").draggable({
+	inertia:true,
+	onmove: dragMoveListener,
+    restrict: {
+      restriction: "body"
+    }
+}).resizable({
+    // resize from all edges and corners
+    edges: { left: true, right: true, bottom: true, top: true },
+
+    // keep the edges inside the parent
+    restrictEdges: {
+      outer: 'parent',
+      endOnly: true,
+    },
+
+    // minimum size
+    restrictSize: {
+      min: { width: 100, height: 50 },
+    },
+
+    inertia: true,
+  })
+  .on('resizemove', function (event) {
+    var target = event.target,
+        x = (parseFloat(target.getAttribute('data-x')) || 0),
+        y = (parseFloat(target.getAttribute('data-y')) || 0);
+
+    // update the element's style
+    target.style.width  = event.rect.width + 'px';
+    target.style.height = event.rect.height + 'px';
+
+    // translate when resizing from top or left edges
+    x += event.deltaRect.left;
+    y += event.deltaRect.top;
+
+    target.style.webkitTransform = target.style.transform =
+        'translate(' + x + 'px,' + y + 'px)';
+
+    target.setAttribute('data-x', x);
+    target.setAttribute('data-y', y);
+    target.textContent = Math.round(event.rect.width) + '\u00D7' + Math.round(event.rect.height);
+ });
 
 
-var players = [];
+  function dragMoveListener (event) {
+    var target = event.target,
+        // keep the dragged position in the data-x/data-y attributes
+        x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+        y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
 
-for (let x=1;x<=8;x++) {
- players.push(new Player({num:x, name:"Player "+x}));
- players[x-1].mount(document.body);
-}
+    // translate the element
+    target.style.webkitTransform =
+    target.style.transform =
+      'translate(' + x + 'px, ' + y + 'px)';
 
-//var player = new player(1);
-//
-//
-deck.mount($container);
-var $button = document.createElement("button");
-$button.setAttribute("class","btn");
-$button.innerHTML="Click";
-$button.onclick=function() {
- console.log("Click");
- deck.poker();
-}
-document.body.appendChild($button);
-document.body.appendChild($container);
+    // update the posiion attributes
+    target.setAttribute('data-x', x);
+    target.setAttribute('data-y', y);
+  }
